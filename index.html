@@ -57,7 +57,6 @@
 <body>
   <div class="container">
     <h1>Pedido de Combo</h1>
-
     <div class="section">
       <label for="combo">Combo:</label>
       <select id="combo">
@@ -70,7 +69,6 @@
       </select>
       <label>Qtd:</label><input type="number" id="qtdCombo" value="1">
     </div>
-
     <div class="section">
       <label for="parceria">Parceria:</label>
       <select id="parceria">
@@ -79,7 +77,6 @@
         <option value="policia">Polícia</option>
       </select>
     </div>
-
     <div class="section produtos">
       <h3>Produtos</h3>
       <div><label>Cupcake:</label> <input type="number" id="cupcake" value="0"></div>
@@ -89,17 +86,14 @@
       <div><label>Maçã do Amor:</label> <input type="number" id="maca" value="0"></div>
       <div><label>Milk Shake:</label> <input type="number" id="milkshake" value="0"></div>
     </div>
-
     <div class="section ingredientes">
       <h3>Ingredientes Necessários</h3>
       <div id="ingredientes"></div>
     </div>
-
     <div class="section">
       <label for="senha">Senha:</label>
       <input type="password" id="senha" placeholder="Digite a senha">
     </div>
-
     <div class="section">
       <h3 id="total">Total: R$ 0,00</h3>
       <button onclick="calcular()">Calcular</button>
@@ -108,124 +102,76 @@
       <button onclick="window.close()">Fechar</button>
     </div>
   </div>
-
-  <script>
-    const precos = {
-      pequeno: {normal: 1500, mecanica: 1275},
-      medio: {normal: 3500, mecanica: 2800},
-      grande: {normal: 6500, mecanica: 5200},
-      kids: {normal: 3600, mecanica: 2880},
-      policial: {normal: 7200, mecanica: 7200},
-      avulso: {normal: 0, mecanica: 0}
-    };
-
-    const limites = {
-      pequeno: {comida: 2, bebida: 2, sobremesa: 0},
-      medio: {comida: 3, bebida: 3, sobremesa: 1},
-      grande: {comida: 5, bebida: 5, sobremesa: 2},
-      kids: {cupcake: 4, milkshake: 4},
-      policial: {comida: 8, bebida: 8, sobremesa: 3}
-    };
-
-    const receitas = {
-      cupcake: {chocolate: 1, leite: 1, pao: 1, tipo: 'comida'},
-      cappuccino: {chocolate: 2, leite: 2, cafe: 5, tipo: 'bebida'},
-      catburger: {pao: 2, ketchup: 3, carne: 1, tipo: 'comida'},
-      catcafe: {chocolate: 2, leite: 2, cafe: 2, tipo: 'bebida'},
-      maca: {agua: 1, acucar: 5, maca: 1, tipo: 'sobremesa'},
-      milkshake: {chocolate: 2, leite: 2, tipo: 'bebida'}
-    };
-
-    function calcular() {
-      const ingredientes = {};
-      let total = 0;
-
-      const parceria = document.getElementById('parceria').value;
-      const combo = document.getElementById('combo').value;
-      const qtdCombo = parseInt(document.getElementById('qtdCombo').value);
-
-      let totalComida = 0, totalBebida = 0, totalSobremesa = 0;
-      const produtosSelecionados = {};
-
-      for (let produto in receitas) {
-        const qtd = parseInt(document.getElementById(produto).value || 0);
-        produtosSelecionados[produto] = qtd;
-        if (receitas[produto].tipo === 'comida') totalComida += qtd;
-        if (receitas[produto].tipo === 'bebida') totalBebida += qtd;
-        if (receitas[produto].tipo === 'sobremesa') totalSobremesa += qtd;
-      }
-
-      if (combo !== 'avulso') {
-        const limite = limites[combo];
-        if (combo === 'kids') {
-          if (produtosSelecionados['cupcake'] > limite.cupcake * qtdCombo || produtosSelecionados['milkshake'] > limite.milkshake * qtdCombo) {
-            alert("Excedeu o limite de produtos para o combo kids.");
-            return;
-          }
-        } else {
-          if (totalComida > limite.comida * qtdCombo || totalBebida > limite.bebida * qtdCombo || totalSobremesa > limite.sobremesa * qtdCombo) {
-            alert("Excedeu o limite de produtos permitidos para o combo selecionado.");
-            return;
-          }
-        }
-      }
-
-      let preco = precos[combo].normal;
-      if (parceria === 'mecanica' && combo !== 'policial') {
-        preco = precos[combo].mecanica;
-      }
-      total += preco * qtdCombo;
-
-      for (let produto in receitas) {
-        const qtd = produtosSelecionados[produto];
-        for (let ing in receitas[produto]) {
-          if (ing !== 'tipo') {
-            ingredientes[ing] = (ingredientes[ing] || 0) + receitas[produto][ing] * qtd;
-          }
-        }
-      }
-
-      let html = '';
-      for (let ing in ingredientes) {
-        html += `<div>${ing}: ${ingredientes[ing]}</div>`;
-      }
-      document.getElementById('ingredientes').innerHTML = html;
-      document.getElementById('total').innerText = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
-
-      window.dadosPedido = {
-        combo,
-        parceria,
-        produtos: produtosSelecionados,
-        ingredientes,
-        total
-      };
+<script>
+const precos = {
+  pequeno: {normal: 1500, mecanica: 1275},
+  medio: {normal: 3500, mecanica: 2800},
+  grande: {normal: 6500, mecanica: 5200},
+  kids: {normal: 3600, mecanica: 2880},
+  policial: {normal: 7200, mecanica: 7200},
+  avulso: {normal: 0, mecanica: 0}
+};
+const receitas = {
+  cupcake: {chocolate: 1, leite: 1, pao: 1},
+  cappuccino: {chocolate: 2, leite: 2, cafe: 5},
+  catburger: {pao: 2, ketchup: 3, carne: 1},
+  catcafe: {chocolate: 2, leite: 2, cafe: 2},
+  maca: {agua: 1, acucar: 5, maca: 1},
+  milkshake: {chocolate: 2, leite: 2}
+};
+function calcular() {
+  const ingredientes = {};
+  let total = 0;
+  const parceria = document.getElementById('parceria').value;
+  const combo = document.getElementById('combo').value;
+  const qtdCombo = parseInt(document.getElementById('qtdCombo').value);
+  let preco = precos[combo].normal;
+  if (parceria === 'mecanica' && combo !== 'policial') {
+    preco = precos[combo].mecanica;
+  }
+  total += preco * qtdCombo;
+  for (let produto in receitas) {
+    const qtd = parseInt(document.getElementById(produto).value || 0);
+    for (let ing in receitas[produto]) {
+      ingredientes[ing] = (ingredientes[ing] || 0) + receitas[produto][ing] * qtd;
     }
-
-    function salvar() {
-      const senha = document.getElementById("senha").value;
-      if (senha !== "cafeteria123") {
-        alert("Senha incorreta!");
-        return;
-      }
-
-      if (!window.dadosPedido) {
-        alert("Por favor, calcule o pedido antes de salvar.");
-        return;
-      }
-
-      fetch("https://script.google.com/macros/s/AKfycby3Yb3SFcrTh84HHESbHusUKNI8VokTlm7BJsTp6hw8IeAHLs0-rkjrYCUFotf2D5S6/exec", {
-        method: "POST",
-        body: JSON.stringify(window.dadosPedido),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.text())
-      .then(res => alert("Pedido salvo com sucesso!"))
-      .catch(err => alert("Erro ao salvar pedido: " + err));
-    }
-
-    function mostrar() {
-      window.open("https://docs.google.com/spreadsheets/d/SEU_ID_DE_PLANILHA", "_blank");
-    }
-  </script>
+  }
+  let html = '';
+  for (let ing in ingredientes) {
+    html += `<div>${ing}: ${ingredientes[ing]}</div>`;
+  }
+  document.getElementById('ingredientes').innerHTML = html;
+  document.getElementById('total').innerText = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+  window.dadosPedido = {
+    combo,
+    parceria,
+    produtos: Object.fromEntries(Object.entries(receitas).map(([prod]) => [prod, parseInt(document.getElementById(prod).value || 0)])),
+    ingredientes,
+    total
+  };
+}
+function salvar() {
+  const senha = document.getElementById("senha").value;
+  if (senha !== "cafeteria123") {
+    alert("Senha incorreta!");
+    return;
+  }
+  if (!window.dadosPedido) {
+    alert("Por favor, calcule o pedido antes de salvar.");
+    return;
+  }
+  fetch("https://script.google.com/macros/s/AKfycby3Yb3SFcrTh84HHESbHusUKNI8VokTlm7BJsTp6hw8IeAHLs0-rkjrYCUFotf2D5S6/exec", {
+    method: "POST",
+    body: JSON.stringify(window.dadosPedido),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.text())
+  .then(res => alert("Pedido salvo com sucesso!"))
+  .catch(err => alert("Erro ao salvar pedido: " + err));
+}
+function mostrar() {
+  window.open("https://docs.google.com/spreadsheets/d/SEU_ID_DE_PLANILHA", "_blank");
+}
+</script>
 </body>
 </html>
