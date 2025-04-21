@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedido de Combo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f9;
+      padding: 30px;
+      color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #4a90e2;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    label {
+      display: inline-block;
+      width: 160px;
+    }
+    input[type="number"], input[type="password"], select {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100px;
+    }
+    button {
+      padding: 10px 15px;
+      margin-right: 10px;
+      background-color: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #357ABD;
+    }
+    .ingredientes div {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pedido de Combo</h1>
+    <div class="section">
+      <label for="combo">Combo:</label>
+      <select id="combo">
+        <option value="avulso">Avulso</option>
+        <option value="pequeno">Combo Pequeno</option>
+        <option value="medio">Combo Médio</option>
+        <option value="grande">Combo Grande</option>
+        <option value="kids">Combo Kids</option>
+        <option value="policial">Combo Policial</option>
+      </select>
+      <label>Qtd:</label><input type="number" id="qtdCombo" value="1">
+    </div>
+    <div class="section">
+      <label for="parceria">Parceria:</label>
+      <select id="parceria">
+        <option value="nenhuma">Nenhuma</option>
+        <option value="mecanica">Mecânica</option>
+        <option value="policia">Polícia</option>
+      </select>
+    </div>
+    <div class="section produtos">
+      <h3>Produtos</h3>
+      <div><label>Cupcake:</label> <input type="number" id="cupcake" value="0"></div>
+      <div><label>Cappuccino:</label> <input type="number" id="cappuccino" value="0"></div>
+      <div><label>Catburger:</label> <input type="number" id="catburger" value="0"></div>
+      <div><label>Catcafe:</label> <input type="number" id="catcafe" value="0"></div>
+      <div><label>Maçã do Amor:</label> <input type="number" id="maca" value="0"></div>
+      <div><label>Milk Shake:</label> <input type="number" id="milkshake" value="0"></div>
+    </div>
+    <div class="section ingredientes">
+      <h3>Ingredientes Necessários</h3>
+      <div id="ingredientes"></div>
+    </div>
+    <div class="section">
+      <label for="senha">Senha:</label>
+      <input type="password" id="senha" placeholder="Digite a senha">
+    </div>
+    <div class="section">
+      <h3 id="total">Total: R$ 0,00</h3>
+      <button onclick="calcular()">Calcular</button>
+      <button onclick="salvar()">Salvar</button>
+      <button onclick="mostrar()">Mostrar</button>
+      <button onclick="window.close()">Fechar</button>
+    </div>
+  </div>
+<script>
+const precos = {
+  pequeno: {normal: 1500, mecanica: 1275},
+  medio: {normal: 3500, mecanica: 2800},
+  grande: {normal: 6500, mecanica: 5200},
+  kids: {normal: 3600, mecanica: 2880},
+  policial: {normal: 7200, mecanica: 7200},
+  avulso: {normal: 0, mecanica: 0}
+};
+const receitas = {
+  cupcake: {chocolate: 1, leite: 1, pao: 1},
+  cappuccino: {chocolate: 2, leite: 2, cafe: 5},
+  catburger: {pao: 2, ketchup: 3, carne: 1},
+  catcafe: {chocolate: 2, leite: 2, cafe: 2},
+  maca: {agua: 1, acucar: 5, maca: 1},
+  milkshake: {chocolate: 2, leite: 2}
+};
+function calcular() {
+  const ingredientes = {};
+  let total = 0;
+  const parceria = document.getElementById('parceria').value;
+  const combo = document.getElementById('combo').value;
+  const qtdCombo = parseInt(document.getElementById('qtdCombo').value);
+  let preco = precos[combo].normal;
+  if (parceria === 'mecanica' && combo !== 'policial') {
+    preco = precos[combo].mecanica;
+  }
+  total += preco * qtdCombo;
+  for (let produto in receitas) {
+    const qtd = parseInt(document.getElementById(produto).value || 0);
+    for (let ing in receitas[produto]) {
+      ingredientes[ing] = (ingredientes[ing] || 0) + receitas[produto][ing] * qtd;
+    }
+  }
+  let html = '';
+  for (let ing in ingredientes) {
+    html += `<div>${ing}: ${ingredientes[ing]}</div>`;
+  }
+  document.getElementById('ingredientes').innerHTML = html;
+  document.getElementById('total').innerText = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+  window.dadosPedido = {
+    combo,
+    parceria,
+    produtos: Object.fromEntries(Object.entries(receitas).map(([prod]) => [prod, parseInt(document.getElementById(prod).value || 0)])),
+    ingredientes,
+    total
+  };
+}
+function salvar() {
+  const senha = document.getElementById("senha").value;
+  if (senha !== "cafeteria123") {
+    alert("Senha incorreta!");
+    return;
+  }
+  if (!window.dadosPedido) {
+    alert("Por favor, calcule o pedido antes de salvar.");
+    return;
+  }
+  fetch("https://script.google.com/macros/s/AKfycby3Yb3SFcrTh84HHESbHusUKNI8VokTlm7BJsTp6hw8IeAHLs0-rkjrYCUFotf2D5S6/exec", {
+    method: "POST",
+    body: JSON.stringify(window.dadosPedido),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.text())
+  .then(res => alert("Pedido salvo com sucesso!"))
+  .catch(err => alert("Erro ao salvar pedido: " + err));
+}
+function mostrar() {
+  window.open("https://docs.google.com/spreadsheets/d/SEU_ID_DE_PLANILHA", "_blank");
+}
+</script>
+</body>
+</html>
