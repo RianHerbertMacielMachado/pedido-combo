@@ -160,7 +160,7 @@ function salvar() {
     alert("Por favor, calcule o pedido antes de salvar.");
     return;
   }
-  fetch("https://script.google.com/macros/s/AKfycby3Yb3SFcrTh84HHESbHusUKNI8VokTlm7BJsTp6hw8IeAHLs0-rkjrYCUFotf2D5S6/exec", {
+  fetch("https://script.google.com/macros/s/AKfycby6W17aCYJh90RLe6AjQyNY0zD73q2djTO6umB4LEdFFfzilwPMMzCRRJCuYkTGQv52/exec", {
     method: "POST",
     body: JSON.stringify(window.dadosPedido),
     headers: { "Content-Type": "application/json" }
