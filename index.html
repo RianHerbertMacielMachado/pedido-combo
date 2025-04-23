@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedido de Combo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Pedido de Combo</h1>
+
+    <div class="section">
+      <label for="combo">Combo:</label>
+      <select id="combo">
+        <option value="avulso">Avulso</option>
+        <option value="pequeno">Combo Pequeno</option>
+        <option value="medio">Combo Médio</option>
+        <option value="grande">Combo Grande</option>
+        <option value="kids">Combo Kids</option>
+        <option value="policial">Combo Policial</option>
+      </select>
+      <label>Qtd:</label><input type="number" id="qtdCombo" value="1">
+    </div>
+
+    <div class="section">
+      <label for="parceria">Parceria:</label>
+      <select id="parceria">
+        <option value="nenhuma">Nenhuma</option>
+        <option value="mecanica">Mecânica</option>
+        <option value="policia">Polícia</option>
+      </select>
+    </div>
+
+    <div class="section produtos">
+      <h3>Produtos</h3>
+      <div><label>Cupcake:</label> <input type="number" id="cupcake" value="0"></div>
+      <div><label>Cappuccino:</label> <input type="number" id="cappuccino" value="0"></div>
+      <div><label>Catburger:</label> <input type="number" id="catburger" value="0"></div>
+      <div><label>Catcafe:</label> <input type="number" id="catcafe" value="0"></div>
+      <div><label>Maçã do Amor:</label> <input type="number" id="maca" value="0"></div>
+      <div><label>Milk Shake:</label> <input type="number" id="milkshake" value="0"></div>
+    </div>
+
+    <div class="section ingredientes">
+      <h3>Ingredientes Necessários</h3>
+      <div id="ingredientes"></div>
+    </div>
+
+    <div class="section">
+      <label for="senha">Senha:</label>
+      <input type="password" id="senha" placeholder="Digite a senha">
+    </div>
+
+    <div class="section">
+      <h3 id="total">Total: R$ 0,00</h3>
+      <button onclick="calcular()">Calcular</button>
+      <button onclick="salvar()">Salvar</button>
+      <button onclick="mostrar()">Mostrar</button>
+      <button onclick="window.close()">Fechar</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
