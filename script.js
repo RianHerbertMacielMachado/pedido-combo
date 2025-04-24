@@ -73,7 +73,7 @@ function salvar() {
     return;
   }
 
-  fetch("https://script.google.com/macros/s/AKfycbykpwtTse6eClAYo_4Wvkw9dbwHjKvDRvbNUc5vK-iEWNJyNJH2-8CFFs_wDBKJ-j_M/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxes3SCmOdfv9Sl_JfuYPRBpW9AEQ7NarL00PC3QSSjHXAmvubt0ek56huMLpw7raTr/exec", {
     method: "POST",
     body: JSON.stringify(window.dadosPedido),
     headers: { "Content-Type": "application/json" }
