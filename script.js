@@ -63,7 +63,7 @@ function calcular() {
 
 function salvar() {
   const senha = document.getElementById("senha").value;
-  if (senha !== "123") {
+  if (senha !== "1234") {
     alert("Senha incorreta!");
     return;
   }
@@ -73,7 +73,7 @@ function salvar() {
     return;
   }
 
-  fetch("https://script.google.com/macros/s/AKfycbxes3SCmOdfv9Sl_JfuYPRBpW9AEQ7NarL00PC3QSSjHXAmvubt0ek56huMLpw7raTr/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbyEZAmg8HeMMdYyDFZFw9KT4dgaVP0ylh4oQ5sDh0fC-SIwMKbhxRhmJc5q8HUfcz9h/exec", {
     method: "POST",
     body: JSON.stringify(window.dadosPedido),
     headers: { "Content-Type": "application/json" }
