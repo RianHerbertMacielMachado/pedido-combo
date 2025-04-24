@@ -64,7 +64,7 @@ function calcular() {
 
 function salvar() {
   const senha = document.getElementById("senha").value;
-  if (senha !== "cafeteria123") {
+  if (senha !== "123") {
     alert("Senha incorreta!");
     return;
   }
